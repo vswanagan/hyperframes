@@ -43,6 +43,27 @@ import {
   shouldMutePreviewAudio,
 } from "../lib/timelineIframeHelpers";
 
+function patchRuntimeClockDuration(win: IframeWindow, targetDuration: number): void {
+  try {
+    const rootEl = win.document?.querySelector("[data-composition-id]");
+    const rootId = rootEl?.getAttribute("data-composition-id");
+    const tl = rootId && win.__timelines?.[rootId];
+    if (tl && typeof tl.duration === "function" && tl.duration() < targetDuration) {
+      const tlWithTo = tl as typeof tl & {
+        to?: (t: object, v: { duration: number }, p: number) => void;
+      };
+      if (typeof tlWithTo.to === "function") {
+        tlWithTo.to({}, { duration: 0 }, targetDuration);
+      }
+    }
+    if (typeof win.__hfForceTimelineRebind === "function") {
+      win.__hfForceTimelineRebind();
+    }
+  } catch {
+    // cross-origin or missing runtime — non-fatal
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Hook
 // ---------------------------------------------------------------------------
@@ -119,6 +140,10 @@ export function useTimelinePlayer() {
       const playerAdapter =
         win.__player && typeof win.__player.play === "function" ? win.__player : null;
       if (getAdapterDuration(playerAdapter) > 0) {
+        const docDur = readTimelineDurationFromDocument(iframe?.contentDocument);
+        if (docDur > 0 && docDur > playerAdapter!.getDuration()) {
+          patchRuntimeClockDuration(win, docDur);
+        }
         return playerAdapter;
       }
 
