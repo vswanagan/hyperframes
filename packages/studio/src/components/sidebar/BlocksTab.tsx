@@ -63,7 +63,7 @@ export const BlocksTab = memo(function BlocksTab({ onAddBlock, onPreviewBlock }:
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search blocks…"
+            placeholder="Search by name, category, or tag…"
             className="w-full bg-neutral-900 border border-neutral-800 rounded-md pl-7 pr-2 py-1.5 text-[11px] text-neutral-200 placeholder:text-neutral-600 focus:outline-none focus:border-neutral-700 transition-colors"
           />
         </div>
@@ -400,6 +400,7 @@ function BlockCard({
             <button
               type="button"
               onClick={handleAdd}
+              title="Add to composition at current time"
               className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-white text-black text-[10px] font-semibold hover:bg-neutral-200 transition-colors"
             >
               <svg
@@ -412,26 +413,51 @@ function BlockCard({
               >
                 <path d="M12 5v14M5 12h14" />
               </svg>
-              {adding ? "Added" : "Add"}
+              {adding ? "Added!" : "Add"}
             </button>
           )}
           <button
             type="button"
             onClick={handleCopyPrompt}
-            className={`flex items-center gap-1 px-3 ${onAdd ? "py-1" : "py-1.5"} rounded-md ${onAdd ? "bg-white/15 text-white/90 text-[9px]" : "bg-white text-black text-[10px] font-semibold"} hover:bg-white/25 transition-colors`}
+            title="Copy a prompt to paste into your AI agent"
+            className={`flex items-center gap-1.5 px-3 ${onAdd ? "py-1" : "py-1.5"} rounded-md transition-colors ${
+              copied
+                ? "bg-emerald-500 text-white"
+                : onAdd
+                  ? "bg-white/15 text-white/90 hover:bg-white/25"
+                  : "bg-white text-black hover:bg-neutral-200"
+            } ${onAdd ? "text-[9px]" : "text-[10px] font-semibold"}`}
           >
-            <svg
-              width={onAdd ? 9 : 12}
-              height={onAdd ? 9 : 12}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <rect x="9" y="9" width="13" height="13" rx="2" />
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-            </svg>
-            {copied ? "Copied!" : "Ask agent"}
+            {copied ? (
+              <>
+                <svg
+                  width={onAdd ? 9 : 11}
+                  height={onAdd ? 9 : 11}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                Copied!
+              </>
+            ) : (
+              <>
+                <svg
+                  width={onAdd ? 9 : 11}
+                  height={onAdd ? 9 : 11}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                Ask agent
+              </>
+            )}
           </button>
         </div>
 

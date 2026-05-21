@@ -127,6 +127,7 @@ export const LeftSidebar = memo(
                   <button
                     type="button"
                     onClick={() => selectTab("code")}
+                    title="Source code editor"
                     className={`rounded-[14px] px-1.5 py-2 text-[10px] font-semibold truncate transition-all ${
                       tab === "code"
                         ? "bg-neutral-800 text-white"
@@ -138,6 +139,7 @@ export const LeftSidebar = memo(
                   <button
                     type="button"
                     onClick={() => selectTab("compositions")}
+                    title="Composition layers and sub-compositions"
                     className={`rounded-[14px] px-1.5 py-2 text-[10px] font-semibold truncate transition-all ${
                       tab === "compositions"
                         ? "bg-neutral-800 text-white"
@@ -149,6 +151,7 @@ export const LeftSidebar = memo(
                   <button
                     type="button"
                     onClick={() => selectTab("assets")}
+                    title="Media assets — videos, images, audio, fonts"
                     className={`rounded-[14px] px-1.5 py-2 text-[10px] font-semibold truncate transition-all ${
                       tab === "assets"
                         ? "bg-neutral-800 text-white"
@@ -161,6 +164,7 @@ export const LeftSidebar = memo(
                     <button
                       type="button"
                       onClick={() => selectTab("blocks")}
+                      title="Browse blocks, components, and templates from the registry"
                       className={`rounded-[14px] px-1.5 py-2 text-[10px] font-semibold truncate transition-all ${
                         tab === "blocks"
                           ? "bg-neutral-800 text-white"
