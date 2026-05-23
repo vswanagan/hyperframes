@@ -510,7 +510,7 @@
           }
         });
         glassLens.visible = false; // disabled — iOS 26 doesn't use the morphing lens
-        scene.add(glassLens);
+        // glassLens removed
 
         phoneGrp.add(m);
         ready++;
@@ -626,7 +626,7 @@
         lpRZ: 0,
         cX: 0,
         cY: 0.15,
-        cZ: 2.8,
+        cZ: 1.6,
         clX: 0,
         clY: 0.1,
         clZ: 0,
@@ -684,8 +684,8 @@
         if (glassLens.geometry !== glassGeos[geoIdx]) glassLens.geometry = glassGeos[geoIdx];
         glassLens.rotation.set(d * 0.7, d * 0.9, d * 0.4);
 
-        // Glass glides across screen surface — hide during rotations to avoid clipping
-        glassLens.visible = t < 3.3 || (t >= 9.5 && t < 12.5) || t >= 13.5;
+        // Glass lens disabled for iOS 26 showcase
+        glassLens.visible = false;
         var gx, gy, gz;
         if (t < 7) {
           // Slide across iPhone screen face
@@ -726,7 +726,7 @@
       // ── iOS 26 Showcase: zoomed-in hero → slow zoom out ──
       // Start very close to the screen, facing front
       // Camera starts close (cZ=2.5) and slowly pulls back (cZ=5)
-      tl.to(S, { cZ: 5, duration: 12, ease: driftEase }, 0.5);
+      tl.to(S, { cZ: 3.2, duration: 12, ease: driftEase }, 0.5);
       tl.to(S, { cY: 0.3, duration: 12, ease: driftEase }, 0.5);
 
       // Very gentle tilt — shows the glass icon refraction from slightly different angles
