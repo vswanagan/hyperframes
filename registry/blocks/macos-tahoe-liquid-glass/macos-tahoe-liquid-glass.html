@@ -1175,18 +1175,18 @@
         }
       }
 
-      function drawNotification(ctx) {
-        drawGlassPanel(ctx, 1002, 62, 390, 96, 28);
-        drawRoundedImage(ctx, macToastIcon, 1022, 84, 44, 44, 12);
+      function drawNotification(ctx, x, y) {
+        drawGlassPanel(ctx, x, y, 390, 96, 28);
+        drawRoundedImage(ctx, macToastIcon, x + 20, y + 22, 44, 44, 12);
         ctx.fillStyle = "rgba(10,34,62,0.96)";
         ctx.font = "900 18px Inter, system-ui, sans-serif";
-        ctx.fillText("Messages", 1082, 88);
+        ctx.fillText("Messages", x + 80, y + 26);
         ctx.font = "800 12px Inter, system-ui, sans-serif";
         ctx.fillStyle = "rgba(10,34,62,0.58)";
-        ctx.fillText("now", 1178, 90);
+        ctx.fillText("now", x + 176, y + 28);
         ctx.font = "800 13px Inter, system-ui, sans-serif";
         ctx.fillStyle = "rgba(10,34,62,0.78)";
-        ctx.fillText("Liquid Glass preview is ready for review.", 1082, 116);
+        ctx.fillText("Liquid Glass preview is ready for review.", x + 80, y + 54);
       }
 
       function drawDock(ctx) {
@@ -1211,13 +1211,10 @@
         drawDesktopWidgets(ctx);
         drawFinderWindow(ctx);
         ctx.textBaseline = "top";
-        var toastProgress = Math.max(0, Math.min(1, S.macToast * 1.15));
-        if (toastProgress > 0.01) {
+        if (S.macToastOpacity > 0.01) {
           ctx.save();
-          ctx.globalAlpha = toastProgress;
-          ctx.translate(0, (1 - toastProgress) * -34);
-          ctx.filter = "blur(" + (1 - toastProgress) * 4 + "px)";
-          drawNotification(ctx);
+          ctx.globalAlpha = S.macToastOpacity;
+          drawNotification(ctx, S.macToastX, S.macToastY);
           ctx.restore();
         }
         drawDock(ctx);
@@ -1372,7 +1369,9 @@
         cardReveal: 0,
         titleFade: 0,
         counter: 0,
-        macToast: 0,
+        macToastOpacity: 0,
+        macToastX: 1464,
+        macToastY: 62,
         macPanel: 0,
         p: 0,
       };
@@ -1399,14 +1398,9 @@
         var macControl = document.getElementById("mac-control");
         var macMedia = document.getElementById("mac-media");
         if (macToast) {
-          macToast.style.opacity = Math.min(1, S.macToast * 1.15);
-          macToast.style.transform =
-            "translateY(" +
-            (1 - S.macToast) * -34 +
-            "px) scale(" +
-            (0.965 + S.macToast * 0.035) +
-            ")";
-          macToast.style.filter = "blur(" + (1 - S.macToast) * 4 + "px)";
+          macToast.style.opacity = S.macToastOpacity;
+          macToast.style.transform = "translateX(" + (S.macToastX - 1002) + "px)";
+          macToast.style.filter = "none";
         }
         if (macControl) {
           macControl.style.opacity = 0.5 + S.macPanel * 0.5;
@@ -1467,7 +1461,12 @@
       tl.to(S, { counter: 43, duration: 2, ease: driftEase }, 0.5);
       // Cards stagger in (0→1 reveals all cards sequentially)
       tl.to(S, { cardReveal: 1, duration: 3, ease: breatheEase }, 0.8);
-      tl.to(S, { macToast: 1, macPanel: 1, duration: 1.1, ease: breatheEase }, 0.45);
+      tl.set(S, { macToastX: 1464, macToastY: 62, macToastOpacity: 0 }, 0);
+      tl.to(S, { macToastX: 988, macToastOpacity: 1, duration: 0.38, ease: "power3.out" }, 0.45);
+      tl.to(S, { macToastX: 1002, duration: 0.16, ease: "power2.out" }, 0.83);
+      tl.to(S, { macToastY: 72, duration: 0.18, ease: "power2.out" }, 4.25);
+      tl.to(S, { macToastY: 62, duration: 0.22, ease: "power2.out" }, 4.43);
+      tl.to(S, { macPanel: 1, duration: 1.1, ease: breatheEase }, 0.45);
     </script>
   </body>
 </html>
